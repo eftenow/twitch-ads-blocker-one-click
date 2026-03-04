@@ -2,9 +2,11 @@
   const api = globalThis.browser ?? globalThis.chrome;
 
   const enabledToggle = document.getElementById("enabledToggle");
+  const watchdogToggle = document.getElementById("watchdogToggle");
   const stateText = document.getElementById("stateText");
   const engineVersion = document.getElementById("engineVersion");
   const conflictText = document.getElementById("conflictText");
+  const watchdogText = document.getElementById("watchdogText");
   const reloadBtn = document.getElementById("reloadBtn");
 
   const storageGet = (defaults) =>
@@ -139,6 +141,43 @@
     conflictText.classList.add("ok");
   };
 
+  const updateWatchdogText = (watchdogEnabled, watchdogInfo) => {
+    watchdogText.classList.remove("warn", "ok");
+
+    if (!watchdogEnabled) {
+      watchdogText.textContent = "Watchdog: OFF";
+      return;
+    }
+
+    if (!watchdogInfo || !watchdogInfo.status) {
+      watchdogText.textContent = "Watchdog: waiting for Twitch tab data...";
+      return;
+    }
+
+    const statusMap = {
+      starting: "starting",
+      warming_up: "warming up",
+      waiting_for_video: "waiting for stream video",
+      monitoring: "monitoring stream health",
+      idle: "idle",
+      recovering: "recovering playback",
+      reloading_tab: "reloading tab for recovery",
+      disabled_by_extension: "disabled because ad blocking is OFF",
+      disabled_by_user: "disabled by user"
+    };
+    const status = statusMap[watchdogInfo.status] || watchdogInfo.status;
+
+    if (watchdogInfo.lastRecoveryAt && watchdogInfo.lastRecoveryAction) {
+      const when = formatCheckedAt(watchdogInfo.lastRecoveryAt);
+      watchdogText.textContent = `Watchdog: ${status}. Last recovery ${when} via ${watchdogInfo.lastRecoveryAction}.`;
+      watchdogText.classList.add("warn");
+      return;
+    }
+
+    watchdogText.textContent = `Watchdog: ${status}.`;
+    watchdogText.classList.add("ok");
+  };
+
   const loadEngineVersion = async () => {
     try {
       const response = await fetch(api.runtime.getURL("injected/upstream.txt"));
@@ -182,11 +221,19 @@
   };
 
   const init = async () => {
-    const current = await storageGet({ enabled: true, conflictInfo: null });
+    const current = await storageGet({
+      enabled: true,
+      watchdogEnabled: true,
+      conflictInfo: null,
+      watchdogInfo: null
+    });
     const enabled = current.enabled !== false;
+    const watchdogEnabled = current.watchdogEnabled !== false;
     enabledToggle.checked = enabled;
+    watchdogToggle.checked = watchdogEnabled;
     updateStateText(enabled);
     updateConflictText(current.conflictInfo);
+    updateWatchdogText(watchdogEnabled, current.watchdogInfo);
     await loadEngineVersion();
   };
 
@@ -201,6 +248,17 @@
     }
   });
 
+  watchdogToggle.addEventListener("change", async () => {
+    const watchdogEnabled = watchdogToggle.checked;
+    updateWatchdogText(watchdogEnabled, null);
+    try {
+      await storageSet({ watchdogEnabled });
+    } catch {
+      watchdogToggle.checked = true;
+      updateWatchdogText(true, null);
+    }
+  });
+
   reloadBtn.addEventListener("click", handleReloadClick);
 
   init().catch(() => {
@@ -208,5 +266,7 @@
     updateStateText(true);
     engineVersion.textContent = "Engine version: unknown";
     updateConflictText(null);
+    watchdogToggle.checked = true;
+    updateWatchdogText(true, null);
   });
 })();

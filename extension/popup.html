@@ -14,10 +14,15 @@
         <span>Ad Blocking</span>
         <input id="enabledToggle" type="checkbox" />
       </label>
+      <label class="row" for="watchdogToggle">
+        <span>Watchdog Recovery</span>
+        <input id="watchdogToggle" type="checkbox" />
+      </label>
 
       <p id="stateText" class="state"></p>
       <p id="engineVersion" class="meta">Engine version: loading...</p>
       <p id="conflictText" class="meta">Conflict check: waiting for Twitch tab data...</p>
+      <p id="watchdogText" class="meta">Watchdog: waiting for Twitch tab data...</p>
 
       <button id="reloadBtn" type="button">Reload Twitch Tab</button>
     </main>
