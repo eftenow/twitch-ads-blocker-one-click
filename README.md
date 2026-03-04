@@ -1,32 +1,43 @@
 # Twitch Ads Blocker (Easy Wrapper)
 
-This is a simple Twitch ad-block extension wrapper based on `vaft` from [pixeltris/TwitchAdSolutions](https://github.com/pixeltris/TwitchAdSolutions).
+[![Latest release](https://img.shields.io/github/v/release/eftenow/twitch-ads-blocker-one-click?display_name=release)](https://github.com/eftenow/twitch-ads-blocker-one-click/releases/latest)
+[![Release build](https://github.com/eftenow/twitch-ads-blocker-one-click/actions/workflows/release.yml/badge.svg)](https://github.com/eftenow/twitch-ads-blocker-one-click/actions/workflows/release.yml)
+[![Stars](https://img.shields.io/github/stars/eftenow/twitch-ads-blocker-one-click?style=social)](https://github.com/eftenow/twitch-ads-blocker-one-click/stargazers)
 
-You do **not** need to publish to any store to use it.
+A one-click Twitch ad blocker extension for Chrome, Edge, Brave, Opera, Vivaldi, and Firefox, based on `vaft` from [pixeltris/TwitchAdSolutions](https://github.com/pixeltris/TwitchAdSolutions).
+
+You do **not** need to publish anything to any store to use it.
 
 ## For normal users (no store needed)
 
-### 1) Download this project
+### 1) Download the latest package (recommended)
 
-1. Open the repo on GitHub.
-2. Click **Code** -> **Download ZIP**.
-3. Unzip it anywhere on your computer.
+- Chrome/Brave/Opera/Vivaldi package:
+  - <https://github.com/eftenow/twitch-ads-blocker-one-click/releases/latest/download/twitch-ads-blocker-chrome-latest.zip>
+- Edge package:
+  - <https://github.com/eftenow/twitch-ads-blocker-one-click/releases/latest/download/twitch-ads-blocker-edge-latest.zip>
+- Firefox package:
+  - <https://github.com/eftenow/twitch-ads-blocker-one-click/releases/latest/download/twitch-ads-blocker-firefox-latest.zip>
+
+If these links do not work yet, use **Code -> Download ZIP** from the repo page.
 
 ### 2) Install on Chrome / Edge / Brave / Opera / Vivaldi
 
-1. Open extension settings:
+1. Unzip the downloaded file.
+2. Open extension settings:
    - Chrome/Brave/Opera/Vivaldi: `chrome://extensions`
    - Edge: `edge://extensions`
-2. Turn on **Developer mode**.
-3. Click **Load unpacked**.
-4. Select the `extension` folder inside this project.
-5. Open Twitch and test a stream.
+3. Turn on **Developer mode**.
+4. Click **Load unpacked**.
+5. Select the unzipped folder.
+6. Open Twitch and test a stream.
 
 ### 3) Install on Firefox (without AMO)
 
-1. Open: `about:debugging#/runtime/this-firefox`
-2. Click **Load Temporary Add-on**.
-3. Select `extension/manifest.json` from this project.
+1. Unzip the downloaded file.
+2. Open: `about:debugging#/runtime/this-firefox`
+3. Click **Load Temporary Add-on**.
+4. Select `manifest.json` from the unzipped folder.
 
 Note: Firefox temporary add-ons are removed when Firefox restarts. You need to load it again after restart.
 
@@ -41,7 +52,7 @@ Note: Firefox temporary add-ons are removed when Firefox restarts. You need to l
 
 ### 5) Update later
 
-Option A (easy): download latest ZIP from GitHub and load unpacked again.
+Option A (easy): download the latest package from the links above and reload extension.
 
 Option B (terminal): from project folder run:
 
@@ -68,9 +79,11 @@ These are for maintainers/publishers, not normal users.
 - Runs daily at `07:19 UTC`.
 - Opens a PR automatically when upstream `vaft` changes.
 
-### Store packaging (developer only)
+### Release and package automation
 
-Build store zips:
+- Release workflow: `.github/workflows/release.yml`
+- Store package workflow: `.github/workflows/store-packages.yml`
+- Local package script:
 
 ```bash
 ./scripts/package-stores.sh
@@ -83,10 +96,6 @@ FIREFOX_EXTENSION_ID="your-addon-id@example.com" ./scripts/package-stores.sh
 ```
 
 Artifacts are created in `dist/stores/<version>/`.
-
-Also available via manual GitHub Actions workflow:
-
-- `.github/workflows/store-packages.yml`
 
 Full release checklist:
 

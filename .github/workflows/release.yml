@@ -1,0 +1,72 @@
+name: Publish Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Optional release tag (example: v0.4.0). Leave blank to use manifest version."
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect extension version
+        id: version
+        run: |
+          VERSION=$(node -e 'const fs=require("fs");const m=JSON.parse(fs.readFileSync("extension/manifest.json","utf8"));process.stdout.write(m.version);')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Resolve release tag
+        id: tag
+        run: |
+          if [ "${GITHUB_REF_TYPE:-}" = "tag" ]; then
+            TAG="$GITHUB_REF_NAME"
+          elif [ -n "${{ inputs.tag }}" ]; then
+            TAG="${{ inputs.tag }}"
+          else
+            TAG="v${{ steps.version.outputs.version }}"
+          fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Validate tag against manifest version
+        run: |
+          EXPECTED_TAG="v${{ steps.version.outputs.version }}"
+          if [ "${{ steps.tag.outputs.tag }}" != "$EXPECTED_TAG" ]; then
+            echo "Tag/version mismatch. Expected $EXPECTED_TAG based on extension/manifest.json"
+            exit 1
+          fi
+
+      - name: Build store packages
+        run: ./scripts/package-stores.sh
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-packages-v${{ steps.version.outputs.version }}
+          path: dist/stores/${{ steps.version.outputs.version }}/*
+
+      - name: Create or update GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="${{ steps.tag.outputs.tag }}"
+          RELEASE_DIR="dist/stores/${{ steps.version.outputs.version }}"
+          ASSETS=("$RELEASE_DIR"/*.zip "$RELEASE_DIR"/SHA256SUMS.txt)
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "${ASSETS[@]}" --clobber
+          else
+            gh release create "$TAG" "${ASSETS[@]}" --title "Release $TAG" --generate-notes
+          fi

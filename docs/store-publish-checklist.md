@@ -19,8 +19,11 @@ Use this checklist for each release.
    ```
 4. Confirm outputs exist in `dist/stores/<version>/`:
    - `twitch-ads-blocker-chrome-v<version>.zip`
+   - `twitch-ads-blocker-chrome-latest.zip`
    - `twitch-ads-blocker-edge-v<version>.zip`
+   - `twitch-ads-blocker-edge-latest.zip`
    - `twitch-ads-blocker-firefox-v<version>.zip`
+   - `twitch-ads-blocker-firefox-latest.zip`
    - `SHA256SUMS.txt`
 
 ## 2) Chrome Web Store
@@ -54,4 +57,5 @@ Use this checklist for each release.
 1. Verify all store submissions show the same extension version.
 2. Verify release notes are consistent across stores.
 3. Tag release in GitHub and attach zipped artifacts from `dist/stores/<version>/`.
+   - Or use `.github/workflows/release.yml` with tag `v<manifest-version>`.
 4. Test installed store versions on a real Twitch stream.

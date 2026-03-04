@@ -47,13 +47,17 @@ build_zip() {
 CHROME_DIR="$WORK_DIR/chrome"
 copy_extension "$CHROME_DIR"
 CHROME_ZIP="$RELEASE_DIR/twitch-ads-blocker-chrome-v$VERSION.zip"
+CHROME_ZIP_LATEST="$RELEASE_DIR/twitch-ads-blocker-chrome-latest.zip"
 build_zip "$CHROME_DIR/extension" "$CHROME_ZIP"
+cp "$CHROME_ZIP" "$CHROME_ZIP_LATEST"
 
 # Edge package (same extension contents, separate artifact for store upload)
 EDGE_DIR="$WORK_DIR/edge"
 copy_extension "$EDGE_DIR"
 EDGE_ZIP="$RELEASE_DIR/twitch-ads-blocker-edge-v$VERSION.zip"
+EDGE_ZIP_LATEST="$RELEASE_DIR/twitch-ads-blocker-edge-latest.zip"
 build_zip "$EDGE_DIR/extension" "$EDGE_ZIP"
+cp "$EDGE_ZIP" "$EDGE_ZIP_LATEST"
 
 # Firefox package (adds browser_specific_settings.gecko.id)
 FIREFOX_DIR="$WORK_DIR/firefox"
@@ -76,7 +80,9 @@ manifest.browser_specific_settings = {
 fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n', 'utf8');
 NODE
 FIREFOX_ZIP="$RELEASE_DIR/twitch-ads-blocker-firefox-v$VERSION.zip"
+FIREFOX_ZIP_LATEST="$RELEASE_DIR/twitch-ads-blocker-firefox-latest.zip"
 build_zip "$FIREFOX_DIR/extension" "$FIREFOX_ZIP"
+cp "$FIREFOX_ZIP" "$FIREFOX_ZIP_LATEST"
 
 # Checksums for release integrity
 (
@@ -90,7 +96,10 @@ build_zip "$FIREFOX_DIR/extension" "$FIREFOX_ZIP"
 
 echo "Built store packages in: $RELEASE_DIR"
 echo "- $(basename "$CHROME_ZIP")"
+echo "- $(basename "$CHROME_ZIP_LATEST")"
 echo "- $(basename "$EDGE_ZIP")"
+echo "- $(basename "$EDGE_ZIP_LATEST")"
 echo "- $(basename "$FIREFOX_ZIP")"
+echo "- $(basename "$FIREFOX_ZIP_LATEST")"
 echo "- SHA256SUMS.txt"
 echo "Firefox extension ID used: $FIREFOX_EXTENSION_ID"
