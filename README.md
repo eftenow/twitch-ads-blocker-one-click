@@ -1,6 +1,6 @@
 # Twitch Ads Blocker (Easy Wrapper)
 
-[![Latest release](https://img.shields.io/github/v/release/eftenow/twitch-ads-blocker-one-click?display_name=release)](https://github.com/eftenow/twitch-ads-blocker-one-click/releases/latest)
+[![Latest release](https://img.shields.io/github/v/tag/eftenow/twitch-ads-blocker-one-click?label=release&sort=semver)](https://github.com/eftenow/twitch-ads-blocker-one-click/releases/latest)
 [![Release build](https://github.com/eftenow/twitch-ads-blocker-one-click/actions/workflows/release.yml/badge.svg)](https://github.com/eftenow/twitch-ads-blocker-one-click/actions/workflows/release.yml)
 [![Stars](https://img.shields.io/github/stars/eftenow/twitch-ads-blocker-one-click?style=social)](https://github.com/eftenow/twitch-ads-blocker-one-click/stargazers)
 
