@@ -42,6 +42,15 @@ h1 {
   color: #8f1e2f;
 }
 
+.meta.warn {
+  color: #8f1e2f;
+  font-weight: 600;
+}
+
+.meta.ok {
+  color: #0a6f34;
+}
+
 button {
   width: 100%;
   margin-top: 10px;
