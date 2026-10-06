@@ -1,4 +1,6 @@
-# Twitch Ads Blocker (Easy Wrapper)
+<p align="center"><img src="extension/icons/icon-128.png" width="96" alt="NoBreak icon"></p>
+
+<h1 align="center">NoBreak — Ad-free Twitch</h1>
 
 [![Latest release](https://img.shields.io/github/v/tag/eftenow/twitch-ads-blocker-one-click?label=release&sort=semver)](https://github.com/eftenow/twitch-ads-blocker-one-click/releases/latest)
 [![Release build](https://github.com/eftenow/twitch-ads-blocker-one-click/actions/workflows/release.yml/badge.svg)](https://github.com/eftenow/twitch-ads-blocker-one-click/actions/workflows/release.yml)

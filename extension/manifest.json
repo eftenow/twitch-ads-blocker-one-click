@@ -1,13 +1,25 @@
 {
   "manifest_version": 3,
-  "name": "Twitch Ads Blocker (VAFT Wrapper)",
+  "name": "NoBreak — Ad-free Twitch",
+  "short_name": "NoBreak",
   "version": "0.5.0",
-  "description": "Runs the VAFT Twitch ad-block engine automatically on twitch.tv with no uBlock/userscript setup.",
+  "description": "Watch Twitch without ad breaks. One-click install, no uBlock or userscript setup. Powered by the open-source VAFT engine.",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
   "permissions": [
     "storage",
     "tabs"
   ],
   "action": {
+    "default_title": "NoBreak",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png"
+    },
     "default_popup": "popup.html"
   },
   "content_scripts": [
