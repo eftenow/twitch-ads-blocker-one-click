@@ -14,7 +14,8 @@ if [[ -z "$VERSION" ]]; then
 fi
 
 FIREFOX_EXTENSION_ID="${FIREFOX_EXTENSION_ID:-twitch-ads-blocker-one-click@eftenow.github.io}"
-FIREFOX_MIN_VERSION="${FIREFOX_MIN_VERSION:-109.0}"
+FIREFOX_MIN_VERSION="${FIREFOX_MIN_VERSION:-140.0}"
+FIREFOX_UPDATE_URL="${FIREFOX_UPDATE_URL:-https://github.com/eftenow/twitch-ads-blocker-one-click/releases/latest/download/updates.json}"
 
 RELEASE_DIR="$DIST_BASE/$VERSION"
 WORK_DIR="$(mktemp -d)"
@@ -62,11 +63,12 @@ cp "$EDGE_ZIP" "$EDGE_ZIP_LATEST"
 # Firefox package (adds browser_specific_settings.gecko.id)
 FIREFOX_DIR="$WORK_DIR/firefox"
 copy_extension "$FIREFOX_DIR"
-node - "$FIREFOX_DIR/extension/manifest.json" "$FIREFOX_EXTENSION_ID" "$FIREFOX_MIN_VERSION" <<'NODE'
+node - "$FIREFOX_DIR/extension/manifest.json" "$FIREFOX_EXTENSION_ID" "$FIREFOX_MIN_VERSION" "$FIREFOX_UPDATE_URL" <<'NODE'
 const fs = require('fs');
 const manifestPath = process.argv[2];
 const geckoId = process.argv[3];
 const minVersion = process.argv[4];
+const updateUrl = process.argv[5];
 
 const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
 manifest.browser_specific_settings = {
@@ -74,7 +76,15 @@ manifest.browser_specific_settings = {
   gecko: {
     ...(manifest.browser_specific_settings?.gecko || {}),
     id: geckoId,
-    strict_min_version: minVersion
+    strict_min_version: minVersion,
+    update_url: updateUrl,
+    data_collection_permissions: {
+      required: ['none']
+    }
+  },
+  gecko_android: {
+    ...(manifest.browser_specific_settings?.gecko_android || {}),
+    strict_min_version: '142.0'
   }
 };
 fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n', 'utf8');
@@ -103,3 +113,4 @@ echo "- $(basename "$FIREFOX_ZIP")"
 echo "- $(basename "$FIREFOX_ZIP_LATEST")"
 echo "- SHA256SUMS.txt"
 echo "Firefox extension ID used: $FIREFOX_EXTENSION_ID"
+echo "Firefox update URL used: $FIREFOX_UPDATE_URL"
