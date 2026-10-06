@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Download the latest release
+    url: https://github.com/eftenow/twitch-ads-blocker-one-click/releases/latest
+    about: Many problems are already fixed in the newest version.

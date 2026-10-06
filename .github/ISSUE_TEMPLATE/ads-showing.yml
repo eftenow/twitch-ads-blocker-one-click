@@ -1,0 +1,62 @@
+name: Ads are showing again
+description: Twitch ads are getting through even with the extension on
+title: "ads showing: "
+labels:
+  - ads-leaking
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Twitch changes its ad delivery often. Before reporting, please:
+        1. Update to the [latest release](https://github.com/eftenow/twitch-ads-blocker-one-click/releases/latest).
+        2. Disable other Twitch ad blockers (uBlock scripts, TTV LOL, Purple, etc.).
+        3. Reload the Twitch tab.
+  - type: input
+    id: version
+    attributes:
+      label: Extension version
+      description: Shown at the bottom of the extension popup (e.g. v0.5.0)
+    validations:
+      required: true
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser
+      options:
+        - Chrome
+        - Edge
+        - Brave
+        - Opera
+        - Vivaldi
+        - Firefox
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: ad-type
+    attributes:
+      label: What kind of ad?
+      options:
+        - Pre-roll (when opening a stream)
+        - Mid-roll (during a stream)
+        - Both
+        - Not sure
+    validations:
+      required: true
+  - type: input
+    id: channel
+    attributes:
+      label: Channel where it happened
+      placeholder: twitch.tv/...
+  - type: dropdown
+    id: logged-in
+    attributes:
+      label: Logged in to Twitch?
+      options:
+        - "Yes"
+        - "No"
+  - type: textarea
+    id: details
+    attributes:
+      label: Anything else?
+      description: Purple screen, black screen, "Blocking ads" label shown or not, popup conflict warning, etc.

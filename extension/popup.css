@@ -66,3 +66,105 @@ button {
 button:hover {
   background: #1e4fc5;
 }
+
+[hidden] {
+  display: none !important;
+}
+
+.stats {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid #e3e6ef;
+}
+
+.stats-main {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a1f36;
+}
+
+.stats-sub {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: #42495f;
+}
+
+.banner {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.banner p {
+  margin: 0 0 8px;
+}
+
+.banner.update {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: #fff4d6;
+  border: 1px solid #f0d58a;
+  color: #6b4e00;
+  font-weight: 600;
+}
+
+.banner.star {
+  margin: 12px 0 0;
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
+  color: #1a1f36;
+}
+
+.banner-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.banner-actions button {
+  margin-top: 0;
+  padding: 8px;
+}
+
+button.secondary {
+  width: auto;
+  white-space: nowrap;
+  color: #1a1f36;
+  background: #ffffff;
+  border: 1px solid #c7d2fe;
+}
+
+button.secondary:hover {
+  background: #f6f7fb;
+}
+
+button.link {
+  width: auto;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  color: #2563eb;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+button.link:hover {
+  background: none;
+  text-decoration: underline;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: #6b7280;
+}
