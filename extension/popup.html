@@ -10,6 +10,16 @@
     <main class="panel">
       <h1>Twitch Ads Blocker</h1>
 
+      <div id="updateBanner" class="banner update" hidden>
+        <span id="updateText">Update available</span>
+        <button id="updateBtn" type="button" class="link">Download</button>
+      </div>
+
+      <section class="stats">
+        <p id="statsMain" class="stats-main">No ads blocked yet</p>
+        <p id="statsSub" class="stats-sub">Blocked ad breaks will show up here.</p>
+      </section>
+
       <label class="row" for="enabledToggle">
         <span>Ad Blocking</span>
         <input id="enabledToggle" type="checkbox" />
@@ -25,6 +35,22 @@
       <p id="watchdogText" class="meta">Watchdog: waiting for Twitch tab data...</p>
 
       <button id="reloadBtn" type="button">Reload Twitch Tab</button>
+
+      <div id="starCard" class="banner star" hidden>
+        <p>Enjoying ad-free streams? A GitHub star helps other people find this.</p>
+        <div class="banner-actions">
+          <button id="starBtn" type="button">⭐ Star on GitHub</button>
+          <button id="starDismissBtn" type="button" class="secondary">Not now</button>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <button id="repoLink" type="button" class="link">GitHub</button>
+        <span aria-hidden="true">·</span>
+        <button id="issueLink" type="button" class="link">Report an issue</button>
+        <span aria-hidden="true">·</span>
+        <span id="extVersion"></span>
+      </footer>
     </main>
 
     <script src="popup.js"></script>
