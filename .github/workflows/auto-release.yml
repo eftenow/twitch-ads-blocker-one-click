@@ -1,0 +1,49 @@
+name: Auto Release
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - extension/manifest.json
+
+permissions:
+  contents: write
+
+concurrency:
+  group: auto-release
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.check.outputs.tag }}
+      release: ${{ steps.check.outputs.release }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check for unreleased version
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=$(node -e 'const fs=require("fs");const m=JSON.parse(fs.readFileSync("extension/manifest.json","utf8"));process.stdout.write(m.version);')
+          TAG="v$VERSION"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG already exists"
+            echo "release=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "release=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  release:
+    needs: check
+    if: needs.check.outputs.release == 'true'
+    uses: ./.github/workflows/release.yml
+    with:
+      tag: ${{ needs.check.outputs.tag }}
+    secrets: inherit
