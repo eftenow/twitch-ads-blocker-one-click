@@ -2,6 +2,8 @@
 
 [![Latest release](https://img.shields.io/github/v/tag/eftenow/twitch-ads-blocker-one-click?label=release&sort=semver)](https://github.com/eftenow/twitch-ads-blocker-one-click/releases/latest)
 [![Release build](https://github.com/eftenow/twitch-ads-blocker-one-click/actions/workflows/release.yml/badge.svg)](https://github.com/eftenow/twitch-ads-blocker-one-click/actions/workflows/release.yml)
+[![Last update](https://img.shields.io/github/release-date/eftenow/twitch-ads-blocker-one-click?label=last%20update)](https://github.com/eftenow/twitch-ads-blocker-one-click/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/eftenow/twitch-ads-blocker-one-click/total?label=downloads)](https://github.com/eftenow/twitch-ads-blocker-one-click/releases)
 [![Stars](https://img.shields.io/github/stars/eftenow/twitch-ads-blocker-one-click?style=social)](https://github.com/eftenow/twitch-ads-blocker-one-click/stargazers)
 
 A one-click Twitch ad blocker extension for Chrome, Edge, Brave, Opera, Vivaldi, and Firefox, based on `vaft` from [pixeltris/TwitchAdSolutions](https://github.com/pixeltris/TwitchAdSolutions).
@@ -16,8 +18,8 @@ You do **not** need to publish anything to any store to use it.
   - [Download Chrome Package](https://github.com/eftenow/twitch-ads-blocker-one-click/releases/latest/download/twitch-ads-blocker-chrome-latest.zip)
 - Edge package:
   - [Download Edge Package](https://github.com/eftenow/twitch-ads-blocker-one-click/releases/latest/download/twitch-ads-blocker-edge-latest.zip)
-- Firefox package:
-  - [Download Firefox Package](https://github.com/eftenow/twitch-ads-blocker-one-click/releases/latest/download/twitch-ads-blocker-firefox-latest.zip)
+- Firefox (signed, installs permanently and auto-updates):
+  - [Install for Firefox](https://github.com/eftenow/twitch-ads-blocker-one-click/releases/latest/download/twitch-ads-blocker-firefox-latest.xpi)
 
 If these links do not work yet, use **Code -> Download ZIP** from the repo page.
 
@@ -32,14 +34,13 @@ If these links do not work yet, use **Code -> Download ZIP** from the repo page.
 5. Select the unzipped folder.
 6. Open Twitch and test a stream.
 
-### 3) Install on Firefox (without AMO)
+### 3) Install on Firefox
 
-1. Unzip the downloaded file.
-2. Open: `about:debugging#/runtime/this-firefox`
-3. Click **Load Temporary Add-on**.
-4. Select `manifest.json` from the unzipped folder.
+1. Click the **Install for Firefox** link above.
+2. Firefox asks for permission to install the add-on. Click **Continue to Installation**, then **Add**.
 
-Note: Firefox temporary add-ons are removed when Firefox restarts. You need to load it again after restart.
+That's it. The add-on is signed by Mozilla, stays installed after restarts and updates itself.
+Requires Firefox 140 or newer.
 
 ### 4) Use it
 
@@ -52,15 +53,8 @@ Note: Firefox temporary add-ons are removed when Firefox restarts. You need to l
 
 ### 5) Update later
 
-Option A (easy): download the latest package from the links above and reload extension.
-
-Option B (terminal): from project folder run:
-
-```bash
-./scripts/update-vaft.sh
-```
-
-Then go back to your extensions page and click **Reload** on this extension.
+- **Firefox:** updates automatically.
+- **Chrome / Edge / Brave / Opera / Vivaldi:** the popup shows **Update available** when a new version is out. Download the new package, replace the old folder and click **Reload** on the extensions page.
 
 ## Troubleshooting (quick)
 
@@ -77,11 +71,13 @@ These are for maintainers/publishers, not normal users.
 
 - Workflow: `.github/workflows/upstream-sync.yml`
 - Runs daily at `07:19 UTC`.
-- Opens a PR automatically when upstream `vaft` changes.
+- Opens a PR only when upstream `vaft.js` changes, with the patch version already bumped.
+- Merging that PR publishes the release automatically (`.github/workflows/auto-release.yml` releases any manifest version on `main` that has no release yet).
 
 ### Release and package automation
 
 - Release workflow: `.github/workflows/release.yml`
+- Firefox signing (unlisted AMO channel): `./scripts/sign-firefox.sh`, needs repo secrets `AMO_JWT_ISSUER` and `AMO_JWT_SECRET`. Without them the release is published without the `.xpi`.
 - Store package workflow: `.github/workflows/store-packages.yml`
 - Local package script:
 
