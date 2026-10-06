@@ -13,7 +13,7 @@ if [[ -z "$VERSION" ]]; then
   exit 1
 fi
 
-FIREFOX_EXTENSION_ID="${FIREFOX_EXTENSION_ID:-twitch-ads-blocker-one-click@eftenow.github.io}"
+FIREFOX_EXTENSION_ID="${FIREFOX_EXTENSION_ID:-nobreak@eftenow.github.io}"
 FIREFOX_MIN_VERSION="${FIREFOX_MIN_VERSION:-140.0}"
 FIREFOX_UPDATE_URL="${FIREFOX_UPDATE_URL:-https://github.com/eftenow/twitch-ads-blocker-one-click/releases/latest/download/updates.json}"
 
