@@ -1,0 +1,38 @@
+name: Bug report
+description: Stream freezes, popup issues, install problems or anything else broken
+title: "bug: "
+labels:
+  - bug
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Extension version
+      description: Shown at the bottom of the extension popup (e.g. v0.5.0)
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      placeholder: Chrome 141, Firefox 143, ...
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open twitch.tv/...
+        2. ...
+  - type: textarea
+    id: popup
+    attributes:
+      label: Popup status
+      description: Copy the Conflict check and Watchdog lines from the popup, or attach a screenshot
