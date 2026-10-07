@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NoBreak — Watch Twitch without ad breaks</title>
+  <meta name="description" content="NoBreak is a free, open-source browser extension that skips Twitch ad breaks. One-click install for Chrome, Edge, Brave and Firefox. No uBlock setup, no proxies, no tracking.">
+  <link rel="icon" type="image/png" href="assets/icon-128.png">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="NoBreak — Watch Twitch without ad breaks">
+  <meta property="og:description" content="Free, open-source extension that skips Twitch ad breaks. Chrome, Edge, Brave and Firefox.">
+  <meta property="og:image" content="https://eftenow.github.io/twitch-ads-blocker-one-click/assets/social-preview.png">
+  <meta property="og:url" content="https://eftenow.github.io/twitch-ads-blocker-one-click/">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #121019;
+      --bg-raised: #1b1826;
+      --border: rgba(255, 255, 255, 0.1);
+      --text: #f4f2ff;
+      --muted: #a8a3bd;
+      --accent: #8b5cf6;
+      --accent-strong: #6d28d9;
+      --accent-soft: #c4b5fd;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Inter, "Segoe UI", system-ui, sans-serif;
+      background:
+        radial-gradient(900px 520px at 80% -10%, rgba(139, 92, 246, 0.35), transparent 60%),
+        radial-gradient(700px 420px at -10% 40%, rgba(79, 70, 229, 0.22), transparent 60%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--accent-soft); }
+
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 20px;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .logo img { width: 32px; height: 32px; }
+
+    .nav-links { display: flex; gap: 20px; font-size: 15px; }
+
+    .nav-links a { color: var(--muted); text-decoration: none; }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 56px;
+      align-items: center;
+      padding: 56px 0 80px;
+    }
+
+    h1 {
+      font-size: clamp(40px, 6vw, 64px);
+      line-height: 1.05;
+      letter-spacing: -1.5px;
+      margin: 0 0 20px;
+    }
+
+    h1 span {
+      background: linear-gradient(90deg, var(--accent-soft), #818cf8);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .lead { font-size: 19px; color: var(--muted); margin: 0 0 32px; max-width: 520px; }
+
+    .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 22px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 16px;
+      text-decoration: none;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+
+    .btn-primary { background: var(--accent-strong); color: #fff; box-shadow: 0 10px 30px rgba(109, 40, 217, 0.45); }
+
+    .btn-primary:hover { background: #5b21b6; }
+
+    .btn-secondary { background: rgba(255, 255, 255, 0.06); color: var(--text); border: 1px solid var(--border); }
+
+    .btn-secondary:hover { background: rgba(255, 255, 255, 0.1); }
+
+    .meta { font-size: 14px; color: var(--muted); }
+
+    .hero-shot { display: flex; justify-content: center; }
+
+    .hero-shot img {
+      width: 100%;
+      max-width: 320px;
+      border-radius: 18px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55), 0 0 0 1px var(--border);
+    }
+
+    section { padding: 72px 0; border-top: 1px solid var(--border); }
+
+    h2 { font-size: clamp(28px, 4vw, 38px); letter-spacing: -0.8px; margin: 0 0 12px; }
+
+    .section-lead { color: var(--muted); margin: 0 0 40px; max-width: 640px; }
+
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+    .card {
+      background: var(--bg-raised);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    .card h3 { margin: 0 0 6px; font-size: 18px; }
+
+    .card p { margin: 0; color: var(--muted); font-size: 15px; }
+
+    .card .icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: rgba(139, 92, 246, 0.16);
+      color: var(--accent-soft);
+      margin-bottom: 16px;
+    }
+
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+
+    .tab {
+      font: inherit;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .tab[aria-selected="true"] { background: var(--accent-strong); border-color: var(--accent-strong); color: #fff; }
+
+    .panel[hidden] { display: none; }
+
+    .steps { counter-reset: step; list-style: none; padding: 0; margin: 0 0 20px; display: grid; gap: 12px; }
+
+    .steps li {
+      counter-increment: step;
+      display: flex;
+      gap: 14px;
+      align-items: baseline;
+      background: var(--bg-raised);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 18px;
+    }
+
+    .steps li::before {
+      content: counter(step);
+      flex: none;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 14px;
+      background: rgba(139, 92, 246, 0.2);
+      color: var(--accent-soft);
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.92em;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+
+    .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 16px; }
+
+    table { width: 100%; border-collapse: collapse; min-width: 640px; font-size: 15px; }
+
+    th, td { padding: 14px 18px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+
+    th { background: var(--bg-raised); font-weight: 700; }
+
+    tr:last-child td { border-bottom: 0; }
+
+    td:first-child { color: var(--muted); font-weight: 600; }
+
+    .us { color: var(--text); font-weight: 600; }
+
+    .note { color: var(--muted); font-size: 15px; margin-top: 16px; }
+
+    details {
+      background: var(--bg-raised);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 10px;
+    }
+
+    summary { cursor: pointer; font-weight: 600; }
+
+    details p { color: var(--muted); margin: 10px 0 0; }
+
+    footer { border-top: 1px solid var(--border); padding: 32px 0 48px; color: var(--muted); font-size: 14px; }
+
+    footer .container { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+
+    @media (max-width: 820px) {
+      .hero { grid-template-columns: 1fr; gap: 40px; padding: 32px 0 56px; }
+      .grid { grid-template-columns: 1fr; }
+      .nav-links a.optional { display: none; }
+      section { padding: 56px 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <a class="logo" href="#"><img src="assets/icon-128.png" alt="">NoBreak</a>
+      <div class="nav-links">
+        <a class="optional" href="#features">Features</a>
+        <a class="optional" href="#install">Install</a>
+        <a class="optional" href="#faq">FAQ</a>
+        <a href="https://github.com/eftenow/twitch-ads-blocker-one-click">GitHub</a>
+      </div>
+    </nav>
+
+    <header class="hero">
+      <div>
+        <h1>Watch Twitch<br><span>without ad breaks.</span></h1>
+        <p class="lead">NoBreak is a free, open-source extension that keeps the stream playing when Twitch starts an ad. Install it once and forget about it.</p>
+        <div class="cta">
+          <a id="primaryCta" class="btn btn-primary" href="#install">Get NoBreak</a>
+          <a class="btn btn-secondary" href="https://github.com/eftenow/twitch-ads-blocker-one-click">⭐ Star on GitHub</a>
+        </div>
+        <p class="meta" id="releaseMeta">Chrome · Edge · Brave · Opera · Vivaldi · Firefox</p>
+      </div>
+      <div class="hero-shot">
+        <img src="assets/popup.png" alt="NoBreak popup showing 37 ad breaks blocked">
+      </div>
+    </header>
+  </div>
+
+  <section id="features">
+    <div class="container">
+      <h2>Everything handled for you</h2>
+      <p class="section-lead">NoBreak packages the proven <a href="https://github.com/pixeltris/TwitchAdSolutions">vaft</a> engine into an extension, then adds the parts that make it pleasant to live with.</p>
+      <div class="grid">
+        <div class="card">
+          <div class="icon">▶</div>
+          <h3>Skips ad breaks</h3>
+          <p>Pre-rolls and mid-rolls are replaced with an ad-free backup stream until the break is over.</p>
+        </div>
+        <div class="card">
+          <div class="icon">↻</div>
+          <h3>Watchdog recovery</h3>
+          <p>If a stream freezes after an ad, NoBreak resumes it automatically.</p>
+        </div>
+        <div class="card">
+          <div class="icon">!</div>
+          <h3>Conflict detection</h3>
+          <p>Warns you when another Twitch ad blocker is running and fighting with it.</p>
+        </div>
+        <div class="card">
+          <div class="icon">#</div>
+          <h3>Your stats</h3>
+          <p>See how many ad breaks were blocked and how much ad time you skipped.</p>
+        </div>
+        <div class="card">
+          <div class="icon">↑</div>
+          <h3>Always current</h3>
+          <p>The engine syncs with upstream daily. Firefox updates on its own, other browsers get a notice.</p>
+        </div>
+        <div class="card">
+          <div class="icon">✓</div>
+          <h3>Private</h3>
+          <p>No account, no analytics, no proxy servers. It only talks to Twitch and checks GitHub for updates.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="install">
+    <div class="container">
+      <h2>Install in a minute</h2>
+      <p class="section-lead">Pick your browser.</p>
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" id="tab-chromium" aria-controls="panel-chromium" aria-selected="true">Chrome, Edge, Brave, Opera, Vivaldi</button>
+        <button class="tab" role="tab" id="tab-firefox" aria-controls="panel-firefox" aria-selected="false">Firefox</button>
+      </div>
+
+      <div class="panel" id="panel-chromium" role="tabpanel" aria-labelledby="tab-chromium">
+        <ol class="steps">
+          <li><span><a href="https://github.com/eftenow/twitch-ads-blocker-one-click/releases/latest/download/twitch-ads-blocker-chrome-latest.zip">Download the latest package</a> and unzip it into a folder you'll keep.</span></li>
+          <li><span>Open <code>chrome://extensions</code> (Edge: <code>edge://extensions</code>).</span></li>
+          <li><span>Turn on <b>Developer mode</b>.</span></li>
+          <li><span>Click <b>Load unpacked</b> and select the unzipped folder.</span></li>
+          <li><span>Open Twitch. That's it.</span></li>
+        </ol>
+        <a class="btn btn-primary" href="https://github.com/eftenow/twitch-ads-blocker-one-click/releases/latest/download/twitch-ads-blocker-chrome-latest.zip">Download for Chrome / Edge / Brave</a>
+      </div>
+
+      <div class="panel" id="panel-firefox" role="tabpanel" aria-labelledby="tab-firefox" hidden>
+        <ol class="steps">
+          <li><span>Click <b>Install for Firefox</b> below.</span></li>
+          <li><span>Click <b>Continue to Installation</b>, then <b>Add</b>.</span></li>
+          <li><span>Open Twitch. NoBreak is signed by Mozilla and updates itself.</span></li>
+        </ol>
+        <a class="btn btn-primary" href="https://github.com/eftenow/twitch-ads-blocker-one-click/releases/latest/download/twitch-ads-blocker-firefox-latest.xpi">Install for Firefox</a>
+        <p class="note">Requires Firefox 140 or newer.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="compare">
+    <div class="container">
+      <h2>How it compares</h2>
+      <p class="section-lead">Same proven engine, none of the setup.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th></th><th>NoBreak</th><th>uBlock Origin + vaft</th><th>TTV LOL PRO</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Setup</td><td class="us">Install the extension</td><td>Custom filter + advanced setting</td><td>Install the extension</td></tr>
+            <tr><td>Chrome</td><td class="us">✅ Developer mode</td><td>❌ Full uBlock Origin no longer runs on Chrome</td><td>✅ Chrome Web Store</td></tr>
+            <tr><td>Firefox</td><td class="us">✅ Signed, auto-updates</td><td>✅</td><td>✅</td></tr>
+            <tr><td>How ads are avoided</td><td class="us">vaft backup streams, in your browser</td><td>Same vaft engine</td><td>Playlist requests go through proxy servers</td></tr>
+            <tr><td>Third-party servers</td><td class="us">None</td><td>None</td><td>Proxy servers</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Every Twitch ad blocker breaks now and then when Twitch changes something. If one stops working, try another, and never run two at the same time.</p>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="container">
+      <h2>FAQ</h2>
+      <details>
+        <summary>Is it free?</summary>
+        <p>Yes. NoBreak is free and open source. There's no paid tier and no account.</p>
+      </details>
+      <details>
+        <summary>Why isn't it on the Chrome Web Store?</summary>
+        <p>NoBreak is distributed through GitHub releases, so Chrome-based browsers install it with Developer mode. Firefox gets a Mozilla-signed version that installs normally.</p>
+      </details>
+      <details>
+        <summary>Does it collect any data?</summary>
+        <p>No. Stats are stored only in your browser. The extension talks to Twitch and checks GitHub for new versions, nothing else.</p>
+      </details>
+      <details>
+        <summary>I still see ads or a purple screen. What now?</summary>
+        <p>Make sure you're on the latest version, disable other Twitch ad blockers and reload the tab. If it persists, <a href="https://github.com/eftenow/twitch-ads-blocker-one-click/issues/new?template=ads-showing.yml">report it on GitHub</a>.</p>
+      </details>
+      <details>
+        <summary>Who makes the ad-blocking engine?</summary>
+        <p>The vaft engine is by <a href="https://github.com/pixeltris/TwitchAdSolutions">pixeltris/TwitchAdSolutions</a> (MIT). NoBreak packages it and adds the watchdog, conflict detection, stats and automatic updates.</p>
+      </details>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <span>NoBreak is not affiliated with Twitch.</span>
+      <span><a href="https://github.com/eftenow/twitch-ads-blocker-one-click">GitHub</a> · <a href="https://github.com/eftenow/twitch-ads-blocker-one-click/issues/new/choose">Report an issue</a></span>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      const repoApi = "https://api.github.com/repos/eftenow/twitch-ads-blocker-one-click";
+      const downloads = {
+        chromium: "https://github.com/eftenow/twitch-ads-blocker-one-click/releases/latest/download/twitch-ads-blocker-chrome-latest.zip",
+        firefox: "https://github.com/eftenow/twitch-ads-blocker-one-click/releases/latest/download/twitch-ads-blocker-firefox-latest.xpi"
+      };
+      const tabs = Array.from(document.querySelectorAll(".tab"));
+
+      const selectTab = (name) => {
+        tabs.forEach((tab) => {
+          const selected = tab.id === `tab-${name}`;
+          tab.setAttribute("aria-selected", String(selected));
+          document.getElementById(tab.getAttribute("aria-controls")).hidden = !selected;
+        });
+      };
+
+      tabs.forEach((tab) => tab.addEventListener("click", () => selectTab(tab.id.replace("tab-", ""))));
+
+      const isFirefox = /firefox/i.test(navigator.userAgent);
+      const isMobile = /android|iphone|ipad/i.test(navigator.userAgent);
+      const primaryCta = document.getElementById("primaryCta");
+      if (!isMobile) {
+        selectTab(isFirefox ? "firefox" : "chromium");
+        primaryCta.textContent = isFirefox ? "Install for Firefox" : "Download for Chrome";
+        primaryCta.href = isFirefox ? downloads.firefox : downloads.chromium;
+      }
+
+      const relativeDays = (date) => {
+        const days = Math.round((Date.now() - date.getTime()) / 86400000);
+        if (days <= 0) return "today";
+        if (days === 1) return "yesterday";
+        return `${days} days ago`;
+      };
+
+      fetch(`${repoApi}/releases/latest`)
+        .then((response) => (response.ok ? response.json() : Promise.reject()))
+        .then((release) => {
+          const published = new Date(release.published_at);
+          document.getElementById("releaseMeta").textContent =
+            `Latest: ${release.tag_name} · updated ${relativeDays(published)} · Chrome · Edge · Brave · Firefox`;
+        })
+        .catch(() => {});
+    })();
+  </script>
+</body>
+</html>

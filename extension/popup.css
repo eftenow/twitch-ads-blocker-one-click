@@ -1,5 +1,6 @@
 :root {
   color-scheme: light;
+  accent-color: #6d28d9;
 }
 
 body {
@@ -15,6 +16,9 @@ body {
 }
 
 h1 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin: 0 0 12px;
   font-size: 16px;
 }
@@ -60,11 +64,11 @@ button {
   font-weight: 600;
   cursor: pointer;
   color: #fff;
-  background: #2563eb;
+  background: #6d28d9;
 }
 
 button:hover {
-  background: #1e4fc5;
+  background: #5b21b6;
 }
 
 [hidden] {
@@ -116,8 +120,8 @@ button:hover {
 
 .banner.star {
   margin: 12px 0 0;
-  background: #eef2ff;
-  border: 1px solid #c7d2fe;
+  background: #f5f3ff;
+  border: 1px solid #ddd6fe;
   color: #1a1f36;
 }
 
@@ -136,7 +140,7 @@ button.secondary {
   white-space: nowrap;
   color: #1a1f36;
   background: #ffffff;
-  border: 1px solid #c7d2fe;
+  border: 1px solid #ddd6fe;
 }
 
 button.secondary:hover {
@@ -149,7 +153,7 @@ button.link {
   padding: 0;
   border-radius: 0;
   background: none;
-  color: #2563eb;
+  color: #6d28d9;
   font-weight: 600;
   font-size: 12px;
 }
